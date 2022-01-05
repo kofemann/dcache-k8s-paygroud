@@ -1,0 +1,19 @@
+#
+# tst pipeline with k8s integration
+#
+
+
+stages:
+  - test
+
+variables:
+  NS: build-$CI_PIPELINE_ID
+
+k1:
+  stage: test
+  image: gitlab.desy.de:5555/openstack/kubectl-image:latest
+  script:
+    - kubectl create namespace $NS
+
+  environment:
+    testing
