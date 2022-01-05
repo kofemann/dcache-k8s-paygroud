@@ -11,7 +11,12 @@ variables:
 
 k1:
   stage: test
-  image: gitlab.desy.de:5555/openstack/kubectl-image:latest
+  image:
+    name: rancher/kubectl:v1.22.2
+    entrypoint: ["/usr/bin/env"]
+  tags:
+    - kubernetes
+
   script:
     - kubectl create namespace $NS
 
