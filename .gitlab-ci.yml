@@ -22,7 +22,8 @@ k1:
     #- kubectl create namespace $NS
     - kubectl config set-context --current --namespace=$NS
     - kubectl get pods
-    - sleep 120
+    - kubectl run wn-$CI_PIPELINE_ID --image=centos:8  --restart=Never  --command -- sleep 120
+#    - kubectl delete pod wn-$CI_PIPELINE_ID 
 
   environment:
     testing
