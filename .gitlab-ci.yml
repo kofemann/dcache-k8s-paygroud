@@ -7,7 +7,8 @@ stages:
   - test
 
 variables:
-  NS: build-$CI_PIPELINE_ID
+  #NS: build-$CI_PIPELINE_ID
+  NS: testing 
 
 k1:
   stage: test
@@ -18,7 +19,7 @@ k1:
     - kubernetes
 
   script:
-    - kubectl create namespace $NS
+    #- kubectl create namespace $NS
     - kubectl config set-context --current --namespace=$NS
     - kubectl get pods
     - sleep 120
