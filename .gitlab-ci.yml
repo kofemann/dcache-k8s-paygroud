@@ -19,6 +19,8 @@ k1:
 
   script:
     - kubectl create namespace $NS
+    - kubectl -n $NS get pods
+    - sleep 120
 
   environment:
     testing
