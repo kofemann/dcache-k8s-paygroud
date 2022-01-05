@@ -12,8 +12,8 @@ variables:
 k1:
   stage: test
   image:
-    name: rancher/kubectl:v1.22.2
-    entrypoint: ["/usr/bin/env"]
+    name: bitnami/kubectl:latest
+    entrypoint: [""]
   tags:
     - kubernetes
 
