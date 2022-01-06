@@ -1,0 +1,17 @@
+#
+# A worker node
+#
+
+kind: Pod
+apiVersion: v1
+metadata:
+  name: wn-with-pnfs
+spec:
+
+  containers:
+    - name: wn
+      image: centos:8
+      command:
+        - /bin/sh
+        - "-c"
+        - "sleep 60m"
