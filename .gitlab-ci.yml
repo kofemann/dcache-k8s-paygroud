@@ -26,8 +26,15 @@ k1:
     - kubectl apply -f deployments/dcache-service.yml
     - kubectl run wn-$CI_PIPELINE_ID --image=dcache/pynfs:latest --restart=Never  --command -- sleep 3600
     - sleep 20
-    - kubectl exec wn-$CI_PIPELINE_ID  -- /bin/bash -c "cd /pynfs/nfs4.0; python3 -u ./testserver.py --xml=/xunit-report-v40.xml --maketree dcache-nfs-lab:/data all | tee /tmp/pynfs.log"
+    - kubectl exec wn-$CI_PIPELINE_ID  -- /bin/bash -c "cd /pynfs/nfs4.0; python3 -u ./testserver.py --xml=/xunit-report-v40.xml --maketree dcache-nfs-lab:/data all; exit 0"
+    - kubectl cp  wn-$CI_PIPELINE_ID:/xunit-report-v40.xml xunit-report-v40.xml
     - kubectl delete pod wn-$CI_PIPELINE_ID
 
   environment:
     testing
+
+  artifacts:
+    reports:
+      junit:
+        - "xunit*.xml"
+
