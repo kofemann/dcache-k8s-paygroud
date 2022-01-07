@@ -43,6 +43,7 @@ k1:
 
   after_script:
     # try to clean at the end
+    - kubectl config set-context --current --namespace=$NS
     - kubectl delete -f deployments/dcache-service.yml
     - kubectl delete -f deployments/zookeeper.yml
     - kubectl delete -f deployments/postgresql-service.yml
