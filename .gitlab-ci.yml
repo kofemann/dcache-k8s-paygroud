@@ -23,21 +23,29 @@ k1:
   script:
     # idealy, we want a namespace per job. For not we just limit number of parallel jobs with `resource_group`
     # - kubectl create namespace $NS. Thus for now just delete all leftovers...
-    - kubectl -n $NS delete pods --all
-    
     - kubectl config set-context --current --namespace=$NS
+
+    - kubectl -n $NS delete StatefulSets --all
+    - kubectl -n $NS delete pods --all
+
     - kubectl apply -f deployments/postgresql-service.yml
     - kubectl apply -f deployments/zookeeper.yml
     - kubectl apply -f deployments/dcache-service.yml
+
     - kubectl run wn-$CI_PIPELINE_ID --image=dcache/pynfs:0.1 --restart=Never  --command -- sleep 3600
     - kubectl wait --for=condition=Ready pods --all
+
     - kubectl exec wn-$CI_PIPELINE_ID -- /bin/bash -c "cd /pynfs/nfs4.0; python3 -u ./testserver.py --xml=/xunit-report-v40.xml --maketree dcache-svc:/data all; exit 0"
     - kubectl exec wn-$CI_PIPELINE_ID -- /bin/bash -c "cd /pynfs/nfs4.1; python3 -u ./testserver.py --xml=/xunit-report-v41.xml --maketree dcache-svc:/data all; exit 0"
+
     - kubectl cp wn-$CI_PIPELINE_ID:/xunit-report-v40.xml xunit-report-v40.xml
     - kubectl cp wn-$CI_PIPELINE_ID:/xunit-report-v41.xml xunit-report-v41.xml
 
   after_script:
     # try to clean at the end
+    - kubectl delete -f deployments/dcache-service.yml
+    - kubectl delete -f deployments/zookeeper.yml
+    - kubectl delete -f deployments/postgresql-service.yml
     - kubectl -n $NS delete pods --all
 
   environment:
