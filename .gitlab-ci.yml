@@ -31,6 +31,7 @@ k1:
     - kubectl apply -f deployments/postgresql-service.yml
     - kubectl apply -f deployments/zookeeper.yml
     - kubectl apply -f deployments/dcache-service.yml
+    - kubectl wait --for=condition=Ready --all StatefulSets
 
     - kubectl run wn-$CI_PIPELINE_ID --image=dcache/pynfs:0.1 --restart=Never  --command -- sleep 3600
     - kubectl wait --for=condition=Ready pods --all
