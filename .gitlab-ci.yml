@@ -7,23 +7,33 @@ stages:
   - test
 
 variables:
-  #NS: build-$CI_PIPELINE_ID
-  NS: dcache-master
+  NS: build-$CI_PIPELINE_ID
   CHECK_TIMEOUT: --timeout=180s
+  RANCHER_CLI_VERSION: v2.4.14
 
 k1:
   stage: test
   # limit to only one instance of the job at the time
   resource_group: $NS
   image:
-    name: bitnami/kubectl:latest
+    name: centos:8
     entrypoint: [""]
   tags:
     - kubernetes
 
+  before_script:
+    - dnf install -y curl
+    - curl -LO https://releases.rancher.com/cli2/$RANCHER_CLI_VERSION/rancher-linux-amd64-$RANCHER_CLI_VERSION.tar.gz
+    - tar zxvf rancher-linux-amd64-$RANCHER_CLI_VERSION.tar.gz
+    - mv rancher-$RANCHER_CLI_VERSION/rancher /usr/local/bin/
+    - curl -LO https://storage.googleapis.com/kubernetes-release/release/`curl -s https://storage.googleapis.com/kubernetes-release/release/stable.txt`/bin/linux/amd64/kubectl
+    - mv kubectl /usr/local/bin
+    - chmod +x /usr/local/bin/kubectl /usr/local/bin/rancher
+
+    - rancher login--token $RANCHER_TOKEN $RANCHER_URL
+    - rancher namespace create $NS
+
   script:
-    # idealy, we want a namespace per job. For not we just limit number of parallel jobs with `resource_group`
-    # - kubectl create namespace $NS. Thus for now just delete all leftovers...
     - kubectl config set-context --current --namespace=$NS
 
     - kubectl -n $NS delete StatefulSets --all
@@ -49,7 +59,7 @@ k1:
     - kubectl delete -f deployments/dcache-service.yml
     - kubectl delete -f deployments/zookeeper.yml
     - kubectl delete -f deployments/postgresql-service.yml
-    - kubectl -n $NS delete pods --all
+    - rancher namespace delete $NS
 
   environment:
     testing
