@@ -36,9 +36,6 @@ k1:
   script:
     - kubectl config set-context --current --namespace=$NS
 
-    - kubectl -n $NS delete StatefulSets --all
-    - kubectl -n $NS delete pods --all
-
     - kubectl apply -f deployments/postgresql-service.yml
     - kubectl apply -f deployments/zookeeper.yml
     - kubectl apply -f deployments/dcache-service.yml
