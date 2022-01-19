@@ -13,8 +13,6 @@ variables:
 
 k1:
   stage: test
-  # limit to only one instance of the job at the time
-  resource_group: $NS
   image:
     name: centos:8
     entrypoint: [""]
