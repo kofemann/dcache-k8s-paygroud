@@ -30,7 +30,7 @@ k1:
     - mv kubectl /usr/local/bin
     - chmod +x /usr/local/bin/kubectl /usr/local/bin/rancher
 
-    - rancher login --token $RANCHER_TOKEN $RANCHER_URL
+    - rancher login --token $RANCHER_TOKEN $RANCHER_ENDPOINT
     - rancher namespace create $NS
 
   script:
