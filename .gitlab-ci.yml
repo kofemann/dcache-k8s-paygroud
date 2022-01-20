@@ -30,7 +30,7 @@ prepare_env:
 deploy:
   stage: test_deploy
   image:
-    name: centos:8
+    name: bitnami/kubectl:latest
     entrypoint: [""]
   tags:
     - kubernetes
