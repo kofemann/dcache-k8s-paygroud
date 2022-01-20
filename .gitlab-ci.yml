@@ -45,7 +45,7 @@ deploy:
   environment:
     testing
 
-punfs_tests:
+pynfs_tests:
   stage: testing
   allow_failure: true
   image:
@@ -54,6 +54,8 @@ punfs_tests:
   tags:
     - kubernetes
   script:
+    - kubectl config set-context --current --namespace=$NS
+
     - kubectl run pynfs-tester --image=dcache/pynfs:0.1 --restart=Never  --command -- sleep 3600
     - kubectl wait $CHECK_TIMEOUT --for=condition=Ready pods --all
 
