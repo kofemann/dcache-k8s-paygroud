@@ -63,7 +63,7 @@ deploy:
 # dispose kubernetes respurces
 #
 cleanup:
-  stage: prepare
+  stage: cleanup
   image:
     name: rancher/cli2
     entrypoint: ["/bin/cat"]
