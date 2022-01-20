@@ -52,6 +52,9 @@ data:
 
     pool.tags=hostname=${host.name}
 
+    # expose kubernetes service endpoint as the host name
+    dcache.java.options.extra=-Dorg.dcache.net.localaddresses=dcache-svc
+
     chimera.db.user=postgres
     chimera.db.password=let-me-in
     chimera.db.host=postgresql-service
