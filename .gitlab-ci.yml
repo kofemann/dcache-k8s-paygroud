@@ -6,6 +6,7 @@
 stages:
   - prepare
   - test_deploy
+  - testing
   - cleanup
 
 variables:
@@ -34,19 +35,25 @@ deploy:
     entrypoint: [""]
   tags:
     - kubernetes
-
-  allow_failure: true
-
   script:
     - kubectl config set-context --current --namespace=$NS
 
     - kubectl apply -f deployments/postgresql-service.yml
     - kubectl apply -f deployments/zookeeper.yml
     - kubectl apply -f deployments/dcache-service.yml
-    #- kubectl wait $CHECK_TIMEOUT --for=condition=Ready --all StatefulSets 
-    - sleep 180
 
-    # run pynfs tests suite
+  environment:
+    testing
+
+punfs_tests:
+  stage: testing
+  allow_failure: true
+  image:
+    name: bitnami/kubectl:latest
+    entrypoint: [""]
+  tags:
+    - kubernetes
+  script:
     - kubectl run pynfs-tester --image=dcache/pynfs:0.1 --restart=Never  --command -- sleep 3600
     - kubectl wait $CHECK_TIMEOUT --for=condition=Ready pods --all
 
@@ -58,6 +65,10 @@ deploy:
   environment:
     testing
 
+  artifacts:
+    reports:
+      junit:
+        - "xunit*.xml"
 
 #
 # dispose kubernetes respurces
@@ -71,8 +82,4 @@ cleanup:
     - rancher login --token $RANCHER_TOKEN $RANCHER_ENDPOINT
     - rancher namespace delete $NS
 
-  artifacts:
-    reports:
-      junit:
-        - "xunit*.xml"
 
