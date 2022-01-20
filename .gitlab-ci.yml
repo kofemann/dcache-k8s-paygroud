@@ -1,5 +1,5 @@
 #
-# tst pipeline with k8s integration
+# test pipeline with k8s integration
 #
 
 
@@ -40,14 +40,15 @@ k1:
     #- kubectl wait $CHECK_TIMEOUT --for=condition=Ready --all StatefulSets 
     - sleep 180
 
-    - kubectl run wn-$CI_PIPELINE_ID --image=dcache/pynfs:0.1 --restart=Never  --command -- sleep 3600
+    # run pynfs tests suite
+    - kubectl run pynfs-tester --image=dcache/pynfs:0.1 --restart=Never  --command -- sleep 3600
     - kubectl wait $CHECK_TIMEOUT --for=condition=Ready pods --all
 
-    - kubectl exec wn-$CI_PIPELINE_ID -- /bin/bash -c "cd /pynfs/nfs4.0; python3 -u ./testserver.py --xml=/xunit-report-v40.xml --maketree dcache-svc:/data all; exit 0"
-    - kubectl exec wn-$CI_PIPELINE_ID -- /bin/bash -c "cd /pynfs/nfs4.1; python3 -u ./testserver.py --xml=/xunit-report-v41.xml --maketree dcache-svc:/data all; exit 0"
+    - kubectl exec pynfs-tester -- /bin/bash -c "cd /pynfs/nfs4.0; python3 -u ./testserver.py --xml=/xunit-report-v40.xml --maketree dcache-svc:/data all; exit 0"
+    - kubectl exec pynfs-tester -- /bin/bash -c "cd /pynfs/nfs4.1; python3 -u ./testserver.py --xml=/xunit-report-v41.xml --maketree dcache-svc:/data all; exit 0"
 
-    - kubectl cp wn-$CI_PIPELINE_ID:/xunit-report-v40.xml xunit-report-v40.xml
-    - kubectl cp wn-$CI_PIPELINE_ID:/xunit-report-v41.xml xunit-report-v41.xml
+    - kubectl cp pynfs-tester:/xunit-report-v40.xml xunit-report-v40.xml
+    - kubectl cp pynfs-tester:/xunit-report-v41.xml xunit-report-v41.xml
 
   after_script:
     # try to clean at the end
