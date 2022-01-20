@@ -86,6 +86,7 @@ data:
 
     [core/xrootd]
     xrootd.authz.write-paths = /
+    xrootd.authz.anonymous-operations = FULL
 
     [core/httpd]
 
