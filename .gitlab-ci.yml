@@ -4,32 +4,38 @@
 
 
 stages:
-  - test
+  - prepare
+  - test_deploy
+  - cleanup
 
 variables:
   NS: build-$CI_PIPELINE_ID
   CHECK_TIMEOUT: --timeout=180s
   RANCHER_CLI_VERSION: v2.4.14
 
-k1:
-  stage: test
+
+#
+# prepare kubernetes env for the build
+#
+prepare_env:
+  stage: prepare
+  image:
+    name: rancher/cli2
+    entrypoint: ["/bin/cat"]
+  script:
+    - rancher login --token $RANCHER_TOKEN $RANCHER_ENDPOINT
+    - rancher namespace create $NS
+
+
+deploy:
+  stage: test_deploy
   image:
     name: centos:8
     entrypoint: [""]
   tags:
     - kubernetes
 
-  before_script:
-    - dnf install -y curl
-    - curl -LO https://releases.rancher.com/cli2/$RANCHER_CLI_VERSION/rancher-linux-amd64-$RANCHER_CLI_VERSION.tar.gz
-    - tar zxvf rancher-linux-amd64-$RANCHER_CLI_VERSION.tar.gz
-    - mv rancher-$RANCHER_CLI_VERSION/rancher /usr/local/bin/
-    - curl -LO https://storage.googleapis.com/kubernetes-release/release/`curl -s https://storage.googleapis.com/kubernetes-release/release/stable.txt`/bin/linux/amd64/kubectl
-    - mv kubectl /usr/local/bin
-    - chmod +x /usr/local/bin/kubectl /usr/local/bin/rancher
-
-    - rancher login --token $RANCHER_TOKEN $RANCHER_ENDPOINT
-    - rancher namespace create $NS
+  allow_failure: true
 
   script:
     - kubectl config set-context --current --namespace=$NS
@@ -49,14 +55,21 @@ k1:
 
     - kubectl cp pynfs-tester:/xunit-report-v40.xml xunit-report-v40.xml
     - kubectl cp pynfs-tester:/xunit-report-v41.xml xunit-report-v41.xml
-
-  after_script:
-    # try to clean at the end
-    # removing the namespace deletes all pods and services inside it
-    - rancher namespace delete $NS
-
   environment:
     testing
+
+
+#
+# dispose kubernetes respurces
+#
+cleanup:
+  stage: prepare
+  image:
+    name: rancher/cli2
+    entrypoint: ["/bin/cat"]
+  script:
+    - rancher login --token $RANCHER_TOKEN $RANCHER_ENDPOINT
+    - rancher namespace delete $NS
 
   artifacts:
     reports:
