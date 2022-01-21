@@ -39,13 +39,13 @@ deploy:
     - kubectl config set-context --current --namespace=$NS
 
     - kubectl apply -f deployments/postgresql-service.yml
-    - kubectl wait $CHECK_TIMEOUT --for=condition=Ready -f deployments/postgresql-service.yml
+    - kubectl wait $CHECK_TIMEOUT --for=condition=ready pod -l app=postgresql
 
     - kubectl apply -f deployments/zookeeper.yml
-    - kubectl wait $CHECK_TIMEOUT --for=condition=Ready -f deployments/zookeeper.yml
+    - kubectl wait $CHECK_TIMEOUT --for=condition=ready pod -l app=zk
 
     - kubectl apply -f deployments/dcache-service.yml
-    - kubectl wait $CHECK_TIMEOUT --for=condition=Ready -f deployments/dcache-service.yml
+    - kubectl wait $CHECK_TIMEOUT --for=condition=Ready pod -l app=dcache
 
   environment:
     testing
