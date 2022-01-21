@@ -162,7 +162,7 @@ spec:
           mountPath: /opt/dcache/etc/layouts/dcache-k8s.conf
           subPath: dcache-k8s.conf
           readOnly: true
-        - name: 00-init.sh
+        - name: init-00
           mountPath: /dcache.init.d/00-init.sh
           subPath: 00-init.sh
           readOnly: true
