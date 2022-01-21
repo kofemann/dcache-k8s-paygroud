@@ -117,6 +117,8 @@ collect_logs:
     - kubectl logs -l app=dcache --all-containers --tail=-1 > dcache.log
     - kubectl logs -l app=postgresql --all-containers --tail=-1 > postgres.log
     - kubectl logs -l app=zk --all-containers --tail=-1 > zk.log
+  environment:
+    testing
   artifacts:
     paths:
     - "*.log"
