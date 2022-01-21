@@ -80,6 +80,27 @@ pynfs_tests:
       junit:
         - "xunit*.xml"
 
+xrdcp_tests:
+  stage: testing
+  allow_failure: true
+  image:
+    name: bitnami/kubectl:latest
+    entrypoint: [""]
+  tags:
+    - kubernetes
+  script:
+    - kubectl config set-context --current --namespace=$NS
+
+    - kubectl run xrdcp-tester --image=centos:7 --restart=Never  --command -- sleep 3600
+    - kubectl wait $CHECK_TIMEOUT --for=condition=Ready pods --all
+
+    - kubectl exec xrdcp-tester -- /bin/bash -c "yum install -y epel-release"
+    - kubectl exec xrdcp-tester -- /bin/bash -c "yum install -y xrootd-client"
+    - kubectl exec xrdcp-tester -- /bin/bash -c "dd if=/dev/random of=/dev/stdout count=81920 | xrdcp - root://dcache-svc/tests/file.data"
+    - kubectl exec xrdcp-tester -- /bin/bash -c "xrdcp -f root://dcache-svc/tests/file.data /dev/null"
+  environment:
+    testing
+
 #
 # dispose kubernetes respurces
 #
