@@ -138,7 +138,7 @@ spec:
     spec:
       containers:
       - name: dcache
-        image: dcache/dcache:8.0.0s3
+        image: dcache/dcache:8.0.0s4
         command: ["/run.sh", "core"]
         env:
           - name: JAVA_ARGS
