@@ -40,7 +40,12 @@ deploy:
 
     - kubectl apply -f deployments/postgresql-service.yml
     - kubectl apply -f deployments/zookeeper.yml
+
+    - kubectl wait $CHECK_TIMEOUT --for=condition=Ready pod/postgresql-0
+    - kubectl wait $CHECK_TIMEOUT --for=condition=Ready pod/zk-0
+
     - kubectl apply -f deployments/dcache-service.yml
+    - kubectl wait $CHECK_TIMEOUT --for=condition=Ready pod/dcache-0
 
   environment:
     testing
