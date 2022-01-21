@@ -112,6 +112,10 @@ data:
 
   dcache.conf: |-
     dcache.layout=dcache-k8s
+
+  00-init.sh: |-
+    chimera mkdir /testbase
+    chimera chmod 0777 /testbase
 ---
 
 #
@@ -134,7 +138,7 @@ spec:
     spec:
       containers:
       - name: dcache
-        image: dcache/dcache:8.0.0s1
+        image: dcache/dcache:8.0.0s2
         command: ["/run.sh", "core"]
         env:
           - name: JAVA_ARGS
@@ -157,6 +161,10 @@ spec:
         - name: dcache-layout
           mountPath: /opt/dcache/etc/layouts/dcache-k8s.conf
           subPath: dcache-k8s.conf
+          readOnly: true
+        - name: 00-init.sh
+          mountPath: /dcache.init.d/00-init.sh
+          subPath: 00-init.sh
           readOnly: true
       volumes:
       - name: dcache-config
