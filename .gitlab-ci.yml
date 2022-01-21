@@ -7,6 +7,7 @@ stages:
   - prepare
   - test_deploy
   - testing
+  - collect
   - cleanup
 
 variables:
@@ -101,6 +102,25 @@ xrdcp_tests:
     - kubectl exec xrdcp-tester -- cmp /etc/hosts /tmp/file.data
   environment:
     testing
+
+
+
+collect_logs:
+  stage: collect
+  image:
+    name: bitnami/kubectl:latest
+    entrypoint: [""]
+  tags:
+    - kubernetes
+  script:
+    - kubectl config set-context --current --namespace=$NS
+    - kubectl logs -l app=dcache --all-containers --tail=-1 > dcache.log
+    - kubectl logs -l app=postgresql --all-containers --tail=-1 > postgres.log
+    - kubectl logs -l app=zk --all-containers --tail=-1 > zk.log
+  artifacts:
+    paths:
+    - "*.log"
+
 
 #
 # dispose kubernetes respurces
