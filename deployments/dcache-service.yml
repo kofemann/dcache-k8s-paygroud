@@ -114,8 +114,8 @@ data:
     dcache.layout=dcache-k8s
 
   00-init.sh: |-
-    chimera mkdir /testbase
-    chimera chmod 0777 /testbase
+    /opt/dcache/bin/chimera mkdir /testbase
+    /opt/dcache/bin/chimera chmod 0777 /testbase
 ---
 
 #
