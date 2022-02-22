@@ -60,10 +60,6 @@ metadata:
 data:
   dcache-k8s-door: |-
     dcache.broker.scheme = core
-    dcache.zookeeper.connection=zk-cs:2181
-
-    dcache.enable.space-reservation = false
-    cleaner.destination.remove-notification = 
 
     chimera.db.user=postgres
     chimera.db.password=let-me-in
@@ -113,7 +109,6 @@ data:
 
   dcache-k8s-pool: |-
     dcache.broker.scheme = satellite
-    dcache.zookeeper.connection=zk-cs:2181
 
     pool.tags=hostname=${host.name}
     pool.mover.xrootd.security.tls.mode=OFF
@@ -131,6 +126,11 @@ data:
     pool.mover.http.port.max=38080
 
   dcache.conf: |-
+    dcache.enable.space-reservation = false
+    cleaner.destination.remove-notification = 
+    dcache.zookeeper.connection=zk-cs:2181
+    dcache.kafka.bootstrap-servers=kafka-svc:9092
+    dcache.enable.kafka = true
     dcache.layout=dcache-k8s
 
   00-init.sh: |-
