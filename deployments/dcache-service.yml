@@ -9,12 +9,12 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: dcache-svc
+  name: dcache-door-svc
   labels:
-    app: dcache
+    app: dcache-door
 spec:
   selector:
-    app: dcache
+    app: dcache-door
   ports:
     # doors
     - name: nfs-door
@@ -26,6 +26,21 @@ spec:
     - name: webdav-door
       port: 8080
       targetPort: 8080
+    - name: cell-tunnel
+      port: 11111
+      targetPort: 11111
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: dcache-pool-svc
+  labels:
+    app: dcache-pool
+spec:
+  selector:
+    app: dcache-pool
+  ports:
     # movers
     - name: nfs-mover
       port: 32049
@@ -38,19 +53,17 @@ spec:
       targetPort: 38080
 ---
 
-
 apiVersion: v1
 kind: ConfigMap
 metadata:
   name: dcache-k8s-config
 data:
-  dcache-k8s: |-
-    dcache.broker.scheme = none
+  dcache-k8s-door: |-
+    dcache.broker.scheme = core
+    dcache.zookeeper.connection=zk-cs:2181
+
     dcache.enable.space-reservation = false
-
     cleaner.destination.remove-notification = 
-
-    pool.tags=hostname=${host.name}
 
     chimera.db.user=postgres
     chimera.db.password=let-me-in
@@ -62,10 +75,7 @@ data:
     chimerashell.db.password = ${chimera.db.password}
     chimerashell.db.name = ${chimera.db.name}
 
-    dcache.zookeeper.connection=zk-cs:2181
-
     [core]
-
     [core/poolmanager]
 
     [core/pnfsmanager]
@@ -85,20 +95,11 @@ data:
     [core/gplazma]
 
     [core/xrootd]
+    xrootd.security.tls.mode=OFF
     xrootd.authz.write-paths = /
     xrootd.authz.anonymous-operations = FULL
 
     [core/httpd]
-
-    [core/pool]
-    pool.name=pool-A
-    pool.path=/pool
-    pool.mover.nfs.port.min=32049
-    pool.mover.nfs.port.max=32049
-    pool.mover.xrootd.port.min=31094
-    pool.mover.xrootd.port.max=31094
-    pool.mover.http.port.min=38080
-    pool.mover.http.port.max=38080
 
     [core/webdav]
     webdav.net.port=8080
@@ -109,6 +110,25 @@ data:
     [core/frontend]
     frontend.authn.protocol=http
     frontend.authz.anonymous-operations=FULL
+
+  dcache-k8s-pool: |-
+    dcache.broker.scheme = satellite
+    dcache.zookeeper.connection=zk-cs:2181
+
+    pool.tags=hostname=${host.name}
+    pool.mover.xrootd.security.tls.mode=OFF
+
+    [pool]
+
+    [pool/pool]
+    pool.name=pool-A
+    pool.path=/pool
+    pool.mover.nfs.port.min=32049
+    pool.mover.nfs.port.max=32049
+    pool.mover.xrootd.port.min=31094
+    pool.mover.xrootd.port.max=31094
+    pool.mover.http.port.min=38080
+    pool.mover.http.port.max=38080
 
   dcache.conf: |-
     dcache.layout=dcache-k8s
@@ -125,25 +145,84 @@ data:
 apiVersion: apps/v1
 kind: StatefulSet
 metadata:
-  name: dcache
+  name: dcache-pool
 spec:
   selector:
     matchLabels:
-      app: dcache
+      app: dcache-pool
   replicas: 1
-  serviceName: dcache-service
+  serviceName: dcache-pool-service
   template:
     metadata:
       labels:
-        app: dcache
+        app: dcache-pool
     spec:
       containers:
-      - name: dcache
-        image: dcache/dcache:8.0.0s4
+      - name: dcache-pool
+        image: dcache/dcache:8.1.0a
+        command: ["/run.sh", "pool"]
+        env:
+          - name: JAVA_ARGS
+            value: -Dorg.dcache.net.localaddresses=dcache-pool-svc
+        readinessProbe:
+          tcpSocket:
+            port: 32049
+          initialDelaySeconds: 10
+          timeoutSeconds: 5
+        livenessProbe:
+          tcpSocket:
+            port: 32049
+          initialDelaySeconds: 10
+          timeoutSeconds: 5
+        volumeMounts:
+        - name: dcache-config
+          mountPath: /opt/dcache/etc/dcache.conf
+          subPath: dcache.conf
+          readOnly: true
+        - name: dcache-layout
+          mountPath: /opt/dcache/etc/layouts/dcache-k8s.conf
+          subPath: dcache-k8s.conf
+          readOnly: true
+      volumes:
+      - name: dcache-config
+        configMap:
+          name: dcache-k8s-config
+          items:
+          - key: "dcache.conf"
+            path: "dcache.conf"
+      - name: dcache-layout
+        configMap:
+          name: dcache-k8s-config
+          items:
+          - key: "dcache-k8s-pool"
+            path: "dcache-k8s.conf"
+---
+
+#
+# dCache containers
+#
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: dcache-door
+spec:
+  selector:
+    matchLabels:
+      app: dcache-door
+  replicas: 1
+  serviceName: dcache-door-service
+  template:
+    metadata:
+      labels:
+        app: dcache-door
+    spec:
+      containers:
+      - name: dcache-door
+        image: dcache/dcache:8.1.0a
         command: ["/run.sh", "core"]
         env:
           - name: JAVA_ARGS
-            value: -Dorg.dcache.net.localaddresses=dcache-svc
+            value: -Dorg.dcache.net.localaddresses=dcache-door-svc
         readinessProbe:
           tcpSocket:
             port: 2049
@@ -178,7 +257,7 @@ spec:
         configMap:
           name: dcache-k8s-config
           items:
-          - key: "dcache-k8s"
+          - key: "dcache-k8s-door"
             path: "dcache-k8s.conf"
       - name: init-scripts
         configMap:
