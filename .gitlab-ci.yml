@@ -54,6 +54,15 @@ deploy:
   environment:
     testing
 
+
+cvmfs_test:
+  stage: test_deploy
+  image: centos:7
+  tags:
+    - cvmfs
+  script:
+    - ls /cvmfs/grid.desy.de
+
 pynfs_tests:
   stage: testing
   allow_failure: true
