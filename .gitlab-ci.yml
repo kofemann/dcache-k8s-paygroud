@@ -14,6 +14,7 @@ variables:
   NS: build-$CI_PIPELINE_ID
   CHECK_TIMEOUT: --timeout=180s
   RANCHER_CLI_VERSION: v2.4.14
+  AUTOCA_URL: https://ci.dcache.org:8083/
 
 
 #
@@ -61,7 +62,15 @@ cvmfs_test:
   tags:
     - cvmfs
   script:
+    - yum install -y curl python
     - ls /cvmfs/grid.desy.de
+    - source /cvmfs/grid.desy.de/etc/profile.d/grid-ui-env-old.sh
+    - curl https://raw.githubusercontent.com/kofemann/autoca/v1.0-py2/pyclient/autoca-client -o autoca-client
+    - chmod a+x autoca-client
+    - ./autoca-client -n -k userkey.pem -c usercert.pem ${AUTOCA_URL} "Kermit the frog"
+    - yum install -y https://www.desy.de/~tigran/ca_dCacheORG-3.0-4.noarch.rpm
+    - arcproxy --version
+
 
 pynfs_tests:
   stage: testing
