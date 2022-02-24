@@ -68,8 +68,10 @@ cvmfs_test:
     - chmod a+x autoca-client
     - ./autoca-client -n -k userkey.pem -c usercert.pem ${AUTOCA_URL} "Kermit the frog"
     - ls /cvmfs/grid.desy.de
-    - source /cvmfs/grid.desy.de/etc/profile.d/grid-ui-env-old.sh
-#    - arcproxy --version
+    - cp /cvmfs/grid.desy.de/etc/profile.d/grid-ui-env-old.sh /tmp/grid-ui-env.sh
+    - sed -i -e '12,17d' e.sh
+    - source /tmp/grid-ui-env.sh
+    - arcproxy --version
 
 
 pynfs_tests:
