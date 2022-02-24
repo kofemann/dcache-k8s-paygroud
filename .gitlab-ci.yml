@@ -63,13 +63,13 @@ cvmfs_test:
     - cvmfs
   script:
     - yum install -y curl python
-    - ls /cvmfs/grid.desy.de
-    - source /cvmfs/grid.desy.de/etc/profile.d/grid-ui-env-old.sh
+    - yum install -y https://www.desy.de/~tigran/ca_dCacheORG-3.0-4.noarch.rpm
     - curl https://raw.githubusercontent.com/kofemann/autoca/v1.0-py2/pyclient/autoca-client -o autoca-client
     - chmod a+x autoca-client
     - ./autoca-client -n -k userkey.pem -c usercert.pem ${AUTOCA_URL} "Kermit the frog"
-    - yum install -y https://www.desy.de/~tigran/ca_dCacheORG-3.0-4.noarch.rpm
-    - arcproxy --version
+    - ls /cvmfs/grid.desy.de
+    - source /cvmfs/grid.desy.de/etc/profile.d/grid-ui-env-old.sh
+#    - arcproxy --version
 
 
 pynfs_tests:
