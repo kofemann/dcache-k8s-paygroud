@@ -62,8 +62,8 @@ cvmfs_test:
   tags:
     - cvmfs
   script:
-    - yum install -y curl python
-    - yum install -y https://www.desy.de/~tigran/ca_dCacheORG-3.0-4.noarch.rpm
+    - yum install -y curl python openssl
+    - rpm -i https://www.desy.de/~tigran/ca_dCacheORG-3.0-4.noarch.rpm
     - curl https://raw.githubusercontent.com/kofemann/autoca/v1.0-py2/pyclient/autoca-client -o autoca-client
     - chmod a+x autoca-client
     - ./autoca-client -n -k userkey.pem -c usercert.pem ${AUTOCA_URL} "Kermit the frog"
