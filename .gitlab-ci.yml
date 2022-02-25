@@ -62,7 +62,6 @@ cvmfs_test:
   tags:
     - cvmfs
   script: |
-    cat $0
     yum install -y curl python openssl
     rpm -i https://www.desy.de/~tigran/ca_dCacheORG-3.0-4.noarch.rpm
     curl https://raw.githubusercontent.com/kofemann/autoca/v1.0-py2/pyclient/autoca-client -o autoca-client
@@ -72,6 +71,7 @@ cvmfs_test:
     cp /cvmfs/grid.desy.de/etc/profile.d/grid-ui-env-old.sh /tmp/grid-ui-env.sh
     sed -i -e '12,17d' /tmp/grid-ui-env.sh
     source /tmp/grid-ui-env.sh
+    env 
     arcproxy --version
 
 
