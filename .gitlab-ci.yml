@@ -71,7 +71,8 @@ cvmfs_test:
     - cp /cvmfs/grid.desy.de/etc/profile.d/grid-ui-env-old.sh /tmp/grid-ui-env.sh
     - sed -i -e '12,17d' /tmp/grid-ui-env.sh
     - set -o allexport
-    - . /tmp/grid-ui-env.sh && export PATH
+    - . /tmp/grid-ui-env.sh && export PATH && env
+    - echo "======================"
     - env 
     - arcproxy --version
 
