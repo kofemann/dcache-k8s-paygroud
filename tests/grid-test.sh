@@ -9,6 +9,6 @@ chmod a+x autoca-client
 # patch tu run as root
 cp /cvmfs/grid.desy.de/etc/profile.d/grid-ui-env-old.sh /tmp/grid-ui-env.sh
 sed -i -e '12,17d' /tmp/grid-ui-env.sh
-source /tmp/grid-ui-env.sh
+. /tmp/grid-ui-env.sh
 
 arcproxy --version
