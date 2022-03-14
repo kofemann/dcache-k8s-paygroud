@@ -62,7 +62,7 @@ cvmfs_test:
   tags:
     - cvmfs
   script:
-    - yum -y install lsb_release
+    - yum -y install redhat-lsb-core
     - tests/grid-test.sh
 
 pynfs_tests:
