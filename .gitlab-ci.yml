@@ -62,6 +62,7 @@ cvmfs_test:
   tags:
     - cvmfs
   script:
+    - yum -y install lsb_release
     - tests/grid-test.sh
 
 pynfs_tests:
