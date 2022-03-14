@@ -1,12 +1,13 @@
-#!/bin/sh -ex
+#!/bin/sh -e
 
 rpm -i https://www.desy.de/~tigran/ca_dCacheORG-3.0-4.noarch.rpm
 curl https://raw.githubusercontent.com/kofemann/autoca/v1.0-py2/pyclient/autoca-client -o autoca-client
 chmod a+x autoca-client
 ./autoca-client -n -k userkey.pem -c usercert.pem ${AUTOCA_URL} "Kermit the frog"
 
-ls /cvmfs/grid.desy.de
-ls /cvmfs/grid.cern.ch
+# poke automounter
+ls /cvmfs/grid.desy.de > /dev/null
+ls /cvmfs/grid.cern.ch > /dev/null
 
 # patch tu run as root
 cp /cvmfs/grid.desy.de/etc/profile.d/scripts/glite-ui-env-old.sh /tmp/grid-ui-env.sh
