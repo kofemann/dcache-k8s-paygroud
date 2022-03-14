@@ -7,7 +7,7 @@ chmod a+x autoca-client
 ./autoca-client -n -k userkey.pem -c usercert.pem ${AUTOCA_URL} "Kermit the frog"
 
 # patch tu run as root
-cp /cvmfs/grid.desy.de/etc/profile.d/grid-ui-env-old.sh /tmp/grid-ui-env.sh
+cp /cvmfs/grid.desy.de/etc/profile.d/scripts/glite-ui-env-old.sh /tmp/grid-ui-env.sh
 sed -i -e '12,17d' /tmp/grid-ui-env.sh
 . /tmp/grid-ui-env.sh
 
