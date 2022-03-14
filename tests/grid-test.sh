@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/sh -ex
 
 yum install -y curl python openssl
 rpm -i https://www.desy.de/~tigran/ca_dCacheORG-3.0-4.noarch.rpm
