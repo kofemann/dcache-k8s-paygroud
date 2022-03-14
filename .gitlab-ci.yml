@@ -62,7 +62,7 @@ cvmfs_test:
   tags:
     - cvmfs
   script:
-    - yum -y install redhat-lsb-core libtool-ltdl curl python openssl
+    - yum -y install redhat-lsb-core libtool-ltdl curl python openssl libxslt
     - tests/grid-test.sh
 
 pynfs_tests:
