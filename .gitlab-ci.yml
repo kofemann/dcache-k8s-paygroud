@@ -12,7 +12,7 @@ stages:
 
 variables:
   NS: build-$CI_PIPELINE_ID
-  CHECK_TIMEOUT: --timeout=180s
+  CHECK_TIMEOUT: --timeout=300s
   AUTOCA_URL: https://ci.dcache.org:8083/
   CONTEXT: c-kmghz:p-w824c
 
