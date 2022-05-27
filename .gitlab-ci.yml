@@ -67,8 +67,8 @@ pynfs_tests:
     - kubectl run pynfs-tester --image=dcache/pynfs:0.1 --restart=Never  --command -- sleep 3600
     - kubectl wait $CHECK_TIMEOUT --for=condition=Ready pods --all
 
-    - kubectl exec pynfs-tester -- /bin/bash -c "cd /pynfs/nfs4.0; python3 -u ./testserver.py --xml=/xunit-report-v40.xml --maketree dcache-svc:/data all; exit 0"
-    - kubectl exec pynfs-tester -- /bin/bash -c "cd /pynfs/nfs4.1; python3 -u ./testserver.py --xml=/xunit-report-v41.xml --maketree dcache-svc:/data all; exit 0"
+    - kubectl exec pynfs-tester -- /bin/bash -c "cd /pynfs/nfs4.0; python3 -u ./testserver.py --xml=/xunit-report-v40.xml --maketree dcache-door-svc:/data all; exit 0"
+    - kubectl exec pynfs-tester -- /bin/bash -c "cd /pynfs/nfs4.1; python3 -u ./testserver.py --xml=/xunit-report-v41.xml --maketree dcache-door-svc:/data all; exit 0"
 
     - kubectl cp pynfs-tester:/xunit-report-v40.xml xunit-report-v40.xml
     - kubectl cp pynfs-tester:/xunit-report-v41.xml xunit-report-v41.xml
@@ -94,8 +94,8 @@ xrdcp_tests:
 
     - kubectl exec xrdcp-tester -- yum install -y epel-release
     - kubectl exec xrdcp-tester -- yum install -y xrootd-client
-    - kubectl exec xrdcp-tester -- xrdcp /etc/hosts root://dcache-svc/tests/file.data
-    - kubectl exec xrdcp-tester -- xrdcp root://dcache-svc/tests/file.data /tmp/file.data
+    - kubectl exec xrdcp-tester -- xrdcp /etc/hosts root://dcache-door-svc/tests/file.data
+    - kubectl exec xrdcp-tester -- xrdcp root://dcache-door-svc/tests/file.data /tmp/file.data
     - kubectl exec xrdcp-tester -- cmp /etc/hosts /tmp/file.data
   environment:
     testing
