@@ -107,9 +107,12 @@ collect_logs:
   image: fjuette/docker-rancher-cli
   tags:
     - kubernetes
+  when: always
+  allow_failure: true
   script:
     - kubectl config set-context --current --namespace=$NS
-    - kubectl logs -l app=dcache --all-containers --tail=-1 > dcache.log
+    - kubectl logs -l app=dcache-door --all-containers --tail=-1 > dcache-door.log
+    - kubectl logs -l app=dcache-pool --all-containers --tail=-1 > dcache-pool.log
     - kubectl logs -l app=postgresql --all-containers --tail=-1 > postgres.log
     - kubectl logs -l app=zk --all-containers --tail=-1 > zk.log
   environment:
