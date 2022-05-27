@@ -135,12 +135,13 @@ collect_logs:
 
 
 #
-# dispose kubernetes respurces
+# dispose kubernetes resources
 #
 cleanup:
   stage: cleanup
   image:
     name: fjuette/docker-rancher-cli
+  when: always
   script:
     - rancher login --token $RANCHER_TOKEN $RANCHER_ENDPOINT --context $CONTEXT
     - rancher namespace delete $NS
