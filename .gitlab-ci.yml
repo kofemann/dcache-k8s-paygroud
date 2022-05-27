@@ -22,8 +22,7 @@ variables:
 #
 prepare_env:
   stage: prepare
-  image:
-    name: fjuette/docker-rancher-cli
+  image: fjuette/docker-rancher-cli
   script:
     - rancher login --token $RANCHER_TOKEN $RANCHER_ENDPOINT --context $CONTEXT
     - rancher namespace create $NS
@@ -31,8 +30,7 @@ prepare_env:
 
 deploy:
   stage: test_deploy
-  image:
-    name: fjuette/docker-rancher-cli
+  image: fjuette/docker-rancher-cli
   tags:
     - kubernetes
   script:
@@ -66,9 +64,7 @@ cvmfs_test:
 pynfs_tests:
   stage: testing
   allow_failure: true
-  image:
-    name: bitnami/kubectl:latest
-    entrypoint: [""]
+  image: fjuette/docker-rancher-cli
   tags:
     - kubernetes
   script:
@@ -93,9 +89,7 @@ pynfs_tests:
 xrdcp_tests:
   stage: testing
   allow_failure: true
-  image:
-    name: bitnami/kubectl:latest
-    entrypoint: [""]
+  image: fjuette/docker-rancher-cli
   tags:
     - kubernetes
   script:
@@ -116,9 +110,7 @@ xrdcp_tests:
 
 collect_logs:
   stage: collect
-  image:
-    name: bitnami/kubectl:latest
-    entrypoint: [""]
+  image: fjuette/docker-rancher-cli
   tags:
     - kubernetes
   script:
@@ -138,8 +130,7 @@ collect_logs:
 #
 cleanup:
   stage: cleanup
-  image:
-    name: fjuette/docker-rancher-cli
+  image: fjuette/docker-rancher-cli
   when: always
   script:
     - rancher login --token $RANCHER_TOKEN $RANCHER_ENDPOINT --context $CONTEXT
