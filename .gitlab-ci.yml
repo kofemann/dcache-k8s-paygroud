@@ -32,8 +32,7 @@ prepare_env:
 deploy:
   stage: test_deploy
   image:
-    name: bitnami/kubectl:latest
-    entrypoint: [""]
+    name: fjuette/docker-rancher-cli
   tags:
     - kubernetes
   script:
