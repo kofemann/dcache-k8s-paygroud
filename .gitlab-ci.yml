@@ -23,8 +23,7 @@ variables:
 prepare_env:
   stage: prepare
   image:
-    name: rancher/cli2
-    entrypoint: ["/bin/cat"]
+    name: fjuette/docker-rancher-cli
   script:
     - rancher login --token $RANCHER_TOKEN $RANCHER_ENDPOINT --context $CONTEXT
     - rancher namespace create $NS
@@ -141,10 +140,9 @@ collect_logs:
 cleanup:
   stage: cleanup
   image:
-    name: rancher/cli2
-    entrypoint: ["/bin/cat"]
+    name: fjuette/docker-rancher-cli
   script:
-    - rancher login --token $RANCHER_TOKEN $RANCHER_ENDPOINT
+    - rancher login --token $RANCHER_TOKEN $RANCHER_ENDPOINT --context $CONTEXT
     - rancher namespace delete $NS
 
 
