@@ -13,7 +13,6 @@ stages:
 variables:
   NS: build-$CI_PIPELINE_ID
   CHECK_TIMEOUT: --timeout=180s
-  RANCHER_CLI_VERSION: v2.4.14
   AUTOCA_URL: https://ci.dcache.org:8083/
 
 
