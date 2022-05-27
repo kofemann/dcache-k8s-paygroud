@@ -115,6 +115,7 @@ collect_logs:
     - kubectl logs -l app=dcache-door --all-containers --tail=-1 > dcache-door.log
     - kubectl logs -l app=dcache-pool --all-containers --tail=-1 > dcache-pool.log
     - kubectl logs -l app=postgresql --all-containers --tail=-1 > postgres.log
+    - kubectl logs -l app=kafka --all-containers --tail=-1 > postgres.log
     - kubectl logs -l app=zk --all-containers --tail=-1 > zk.log
   environment:
     testing
