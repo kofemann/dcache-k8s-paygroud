@@ -135,8 +135,8 @@ data:
 
   00-init.sh: |-
     /opt/dcache/bin/dcache database update
-    /opt/dcache/bin/chimera mkdir /testbase
-    /opt/dcache/bin/chimera chmod 0777 /testbase
+    /opt/dcache/bin/chimera mkdir /testbase || true
+    /opt/dcache/bin/chimera chmod 0777 /testbase || true
 ---
 
 #
@@ -226,12 +226,12 @@ spec:
         readinessProbe:
           tcpSocket:
             port: 2049
-          initialDelaySeconds: 30
+          initialDelaySeconds: 90
           timeoutSeconds: 5
         livenessProbe:
           tcpSocket:
             port: 2049
-          initialDelaySeconds: 30
+          initialDelaySeconds: 90
           timeoutSeconds: 5
         volumeMounts:
         - name: dcache-config
