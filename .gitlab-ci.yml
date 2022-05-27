@@ -38,6 +38,7 @@ deploy:
 
     - kubectl apply -f deployments/postgresql-service.yml
     - kubectl apply -f deployments/zookeeper.yml
+    - kubectl apply -f deployments/kafka.yml
     - kubectl apply -f deployments/dcache-service.yml
     - while ! kubectl get pod -l app=dcache-door; do sleep 1; done
     - kubectl wait $CHECK_TIMEOUT --for=condition=Ready pod -l app=dcache-door
