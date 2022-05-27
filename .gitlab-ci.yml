@@ -46,7 +46,7 @@ deploy:
 
     - kubectl apply -f deployments/dcache-service.yml
     - sleep 30
-    - kubectl wait $CHECK_TIMEOUT --for=condition=Ready pod -l app=dcache
+    - kubectl wait $CHECK_TIMEOUT --for=condition=Ready pod -l app=dcache-door
 
   environment:
     testing
