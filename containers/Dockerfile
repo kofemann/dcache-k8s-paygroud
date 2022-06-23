@@ -1,6 +1,6 @@
 FROM centos:7
 
-ENV DCACHE_VERSION=8.1.0-1
+ENV DCACHE_VERSION=8.1.1-1
 ENV DNL_URL=https://www.dcache.org/old/downloads/1.9/repo/8.1/
 
 RUN yum install -y curl
