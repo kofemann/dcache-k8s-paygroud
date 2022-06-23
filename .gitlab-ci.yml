@@ -120,6 +120,7 @@ collect_logs:
   environment:
     testing
   artifacts:
+    name: "logs-$CI_PIPELINE_ID"
     paths:
     - "*.log"
 
