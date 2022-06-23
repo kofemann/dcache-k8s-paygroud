@@ -255,7 +255,7 @@ spec:
         command: ["/run.sh", "dcache-pool-svc-A"]
         env:
           - name: AUTOCA_URL
-            value: https://ci.dcache.org:8083/
+            value: https://ci.dcache.org/ca
         volumeMounts:
         - name: dcache-config
           mountPath: /etc/dcache/dcache.conf
@@ -304,7 +304,7 @@ spec:
         command: ["/run.sh", "dcache-pool-svc-B"]
         env:
           - name: AUTOCA_URL
-            value: https://ci.dcache.org:8083/
+            value: https://ci.dcache.org/ca
         volumeMounts:
         - name: dcache-config
           mountPath: /etc/dcache/dcache.conf
@@ -353,7 +353,7 @@ spec:
         command: ["/run.sh", "dcache-pool-svc-C"]
         env:
           - name: AUTOCA_URL
-            value: https://ci.dcache.org:8083/
+            value: https://ci.dcache.org/ca
         volumeMounts:
         - name: dcache-config
           mountPath: /etc/dcache/dcache.conf
@@ -402,7 +402,7 @@ spec:
         command: ["/run.sh", "dcache-door-svc"]
         env:
           - name: AUTOCA_URL
-            value: https://ci.dcache.org:8083/
+            value: https://ci.dcache.org/ca
         readinessProbe:
           tcpSocket:
             port: 2049
