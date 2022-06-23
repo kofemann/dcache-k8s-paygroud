@@ -251,7 +251,7 @@ spec:
     spec:
       containers:
       - name: dcache-pool
-        image: dcache/dcache-test:8.1a
+        image: dcache/dcache-test:8.1c
         command: ["/run.sh", "dcache-pool-svc-A"]
         env:
           - name: AUTOCA_URL
@@ -300,7 +300,7 @@ spec:
     spec:
       containers:
       - name: dcache-pool
-        image: dcache/dcache-test:8.1a
+        image: dcache/dcache-test:8.1c
         command: ["/run.sh", "dcache-pool-svc-B"]
         env:
           - name: AUTOCA_URL
@@ -349,7 +349,7 @@ spec:
     spec:
       containers:
       - name: dcache-pool
-        image: dcache/dcache-test:8.1b
+        image: dcache/dcache-test:8.1c
         command: ["/run.sh", "dcache-pool-svc-C"]
         env:
           - name: AUTOCA_URL
@@ -398,7 +398,7 @@ spec:
     spec:
       containers:
       - name: dcache-door
-        image: dcache/dcache-test:8.1b
+        image: dcache/dcache-test:8.1c
         command: ["/run.sh", "dcache-door-svc"]
         env:
           - name: AUTOCA_URL
