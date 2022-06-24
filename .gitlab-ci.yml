@@ -68,8 +68,9 @@ pynfs_tests:
     - kubectl run pynfs-tester --image=dcache/pynfs:0.1 --restart=Never  --command -- sleep 3600
     - kubectl wait $CHECK_TIMEOUT --for=condition=Ready pods --all
 
-    - kubectl exec pynfs-tester -- /bin/bash -c "cd /pynfs/nfs4.0; python3 -u ./testserver.py --xml=/xunit-report-v40.xml --maketree dcache-door-svc:/data all; exit 0"
-    - kubectl exec pynfs-tester -- /bin/bash -c "cd /pynfs/nfs4.1; python3 -u ./testserver.py --xml=/xunit-report-v41.xml --maketree dcache-door-svc:/data all; exit 0"
+    - kubectl exec pynfs-tester -- /bin/bash -c "cd /pynfs/nfs4.0; python3 -u ./testserver.py --maketree dcache-door-svc:/data OPEN5; exit 0"
+    - kubectl exec pynfs-tester -- /bin/bash -c "cd /pynfs/nfs4.0; python3 -u ./testserver.py --xml=/xunit-report-v40.xml --noinit dcache-door-svc:/data all; exit 0"
+    - kubectl exec pynfs-tester -- /bin/bash -c "cd /pynfs/nfs4.1; python3 -u ./testserver.py --xml=/xunit-report-v41.xml --noinit dcache-door-svc:/data all; exit 0"
 
     - kubectl cp pynfs-tester:/xunit-report-v40.xml xunit-report-v40.xml
     - kubectl cp pynfs-tester:/xunit-report-v41.xml xunit-report-v41.xml
