@@ -4,7 +4,7 @@
 if [ x$1 != x ]
 then
   python3 /autoca-client -n -k /etc/grid-security/hostkey.pem -c /etc/grid-security/hostcert.pem ${AUTOCA_URL} $1
-  chown dcache:dcache /etc/grid-security/hostkey.pem  /etc/grid-security/hostcer.pem
+  chown dcache:dcache /etc/grid-security/hostkey.pem  /etc/grid-security/hostcert.pem
 fi
 
 if [ ! -f /.init_complete ]
