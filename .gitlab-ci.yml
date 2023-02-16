@@ -15,6 +15,7 @@ variables:
   CHECK_TIMEOUT: --timeout=300s
   AUTOCA_URL: https://ci.dcache.org/ca
   CONTEXT: c-6xhql:p-whtqk
+  KUBECONFIG: $KUBE_CONF
 
 
 #
