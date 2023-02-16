@@ -15,8 +15,10 @@ variables:
   CHECK_TIMEOUT: --timeout=300s
   AUTOCA_URL: https://ci.dcache.org/ca
   CONTEXT: c-6xhql:p-whtqk
-  KUBECONFIG: $KUBE_CONF
 
+
+before_script:
+  - export KUBECONFIG=$KUBE_CONF
 
 #
 # prepare kubernetes env for the build
