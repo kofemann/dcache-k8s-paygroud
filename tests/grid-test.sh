@@ -27,7 +27,7 @@ arcproxy -I
 #
 #
 
-yum install -y python3-pip
+yum install -y python3-pip unzip
 pip3 install robotframework
 
 
