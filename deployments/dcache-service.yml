@@ -105,9 +105,9 @@ data:
   dcache-k8s-door: |-
     dcache.broker.scheme = core
 
-    chimera.db.user=postgres
+    chimera.db.user=dcache
     chimera.db.password=let-me-in
-    chimera.db.host=postgresql-service
+    chimera.db.host=chimera-postgresql
     chimera.db.name=chimera
 
     chimerashell.db.host = ${chimera.db.host}
@@ -212,8 +212,8 @@ data:
   dcache.conf: |-
     dcache.enable.space-reservation = false
     cleaner.destination.remove-notification = 
-    dcache.zookeeper.connection=zk-cs:2181
-    dcache.kafka.bootstrap-servers=kafka-svc:9092
+    dcache.zookeeper.connection=cells-zookeeper:2181
+    dcache.kafka.bootstrap-servers=billing-kafka:9092
     dcache.enable.kafka = true
     dcache.layout=dcache-k8s
     dcache.authn.vomsdir=/mnt
